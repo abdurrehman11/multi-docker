@@ -11,20 +11,17 @@ script:
   - docker run -e CI=true sparkubuntu/react-test npm run test
 
 after_success:
+  # Build all the project images
   - docker build -t sparkubuntu/multi-client ./client
   - docker build -t sparkubuntu/multi-nginx ./nginx
   - docker build -t sparkubuntu/multi-server ./server
   - docker build -t sparkubuntu/multi-worker ./worker
 
-deploy:
-  provider: elasticbeanstalk
-  region: 'us-east-1'
-  app: 'docker'
-  env: 'docker-env'
-  bucket_name: 'elasticbeanstalk-us-east-1-998733361551'
-  bucket_path: 'docker'
-  on:
-    branch: master
-  # make sure to escape any special character in repo env secret variables using \
-  access_key_id: $AWS_ACCESS_KEY_ID
-  secret_access_key: $AWS_SECRET_ACCESS_KEY
+  # Log in to the docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+
+  # Take custom build images and push them to docker hub
+  - docker push sparkubuntu/multi-client
+  - docker push sparkubuntu/multi-nginx
+  - docker push sparkubuntu/multi-server
+  - docker push sparkubuntu/multi-worker
