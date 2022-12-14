@@ -12,16 +12,19 @@ script:
 
 after_success:
   # Build all the project images
-  - docker build -t sparkubuntu/multi-client ./client
-  - docker build -t sparkubuntu/multi-nginx ./nginx
-  - docker build -t sparkubuntu/multi-server ./server
-  - docker build -t sparkubuntu/multi-worker ./worker
+  - docker build -t abdurrehman245/multi-client ./client
+  - docker build -t abdurrehman245/multi-nginx ./nginx
+  - docker build -t abdurrehman245/multi-server ./server
+  - docker build -t abdurrehman245/multi-worker ./worker
 
   # Log in to the docker CLI
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
 
+  # https://docs.docker.com/docker-hub/repos/#:~:text=To%20push%20an%20image%20to,docs%2Fbase%3Atesting%20).
+  # docker build -t <username>/<repo-name>
+  # username must be the same as of docker hub username
   # Take custom build images and push them to docker hub
-  - docker push sparkubuntu/multi-client
-  - docker push sparkubuntu/multi-nginx
-  - docker push sparkubuntu/multi-server
-  - docker push sparkubuntu/multi-worker
+  - docker push abdurrehman245/multi-client
+  - docker push abdurrehman245/multi-nginx
+  - docker push abdurrehman245/multi-server
+  - docker push abdurrehman245/multi-worker
