@@ -23,8 +23,20 @@ after_success:
   # https://docs.docker.com/docker-hub/repos/#:~:text=To%20push%20an%20image%20to,docs%2Fbase%3Atesting%20).
   # docker build -t <username>/<repo-name>
   # username must be the same as of docker hub username
-  # Take custom build images and push them to docker hub
+  # Take custom build images and push them to docker hub                                   
   - docker push abdurrehman245/multi-client
   - docker push abdurrehman245/multi-nginx
   - docker push abdurrehman245/multi-server
   - docker push abdurrehman245/multi-worker
+
+deploy:
+  provider: elasticbeanstalk
+  region: 'us-east-1'
+  app: 'multi-docker'
+  env: 'Multidocker-env'
+  bucket_name: 'elasticbeanstalk:us-east-1:998733361551'
+  bucket_path: 'docker-multi'
+  on:
+    branch: master
+  access_key_id: $AWS_ACCESS_KEY_ID
+  secret_access_key: $AWS_SECRET_ACCESS_KEY
